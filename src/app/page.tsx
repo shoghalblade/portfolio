@@ -314,6 +314,132 @@ function useTypingLoop(words: string[], speed = 60, pause = 1800, deleteSpeed = 
   return display;
 }
 
+function AboutTerminal() {
+  const [started, setStarted] = useState(false);
+  const [step, setStep] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started) {
+          setStarted(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [started]);
+
+  useEffect(() => {
+    if (!started) return;
+    const timers = [
+      setTimeout(() => setStep(1), 250),
+      setTimeout(() => setStep(2), 900),
+      setTimeout(() => setStep(3), 1400),
+      setTimeout(() => setStep(4), 1900),
+      setTimeout(() => setStep(5), 2400),
+      setTimeout(() => setStep(6), 3000),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [started]);
+
+  return (
+    <div ref={containerRef} className="terminal-window">
+      <div className="terminal-titlebar">
+        <span className="filetab-dot filetab-dot-red" aria-hidden="true" />
+        <span className="filetab-dot filetab-dot-yellow" aria-hidden="true" />
+        <span className="filetab-dot filetab-dot-green" aria-hidden="true" />
+        <span className="terminal-title">mad@portfolio: ~ (interactive stream)</span>
+      </div>
+      <div className="terminal-body" aria-label="About Mad">
+        <span className="t-line">
+          <span className="t-prompt-user">mad</span>
+          <span className="t-sep">@</span>
+          <span className="t-prompt-host">portfolio</span>
+          <span className="t-sep">:</span>
+          <span className="t-prompt-path">~</span>
+          <span className="t-sep">$ </span>
+          <span className="t-prompt">
+            {step >= 1 ? "whoami" : ""}
+            {step === 1 && <span className="hero-typed-caret" />}
+          </span>
+        </span>
+
+        {step >= 2 && (
+          <motion.div
+            initial={{ opacity: 0, x: -15 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex flex-col gap-1 mt-2"
+          >
+            <span className="t-line"><span className="t-key">name</span><span className="t-sep">:     </span><span className="t-str">"Mohammad Javad (Mad)"</span></span>
+            <span className="t-line"><span className="t-key">role</span><span className="t-sep">:     </span><span className="t-str">"Web Developer &amp; Vibe Coder"</span></span>
+          </motion.div>
+        )}
+
+        {step >= 3 && (
+          <motion.div
+            initial={{ opacity: 0, x: -15 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex flex-col gap-1"
+          >
+            <span className="t-line"><span className="t-key">focus</span><span className="t-sep">:    </span><span className="t-str">"web development · full-stack apps · performance · security"</span></span>
+            <span className="t-line"><span className="t-key">stack</span><span className="t-sep">:    </span><span className="t-val">["Next.js", "React", "TypeScript", "Node.js", "Python", "PostgreSQL"]</span></span>
+          </motion.div>
+        )}
+
+        {step >= 4 && (
+          <motion.div
+            initial={{ opacity: 0, x: -15 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex flex-col gap-1"
+          >
+            <span className="t-line"><span className="t-key">security</span><span className="t-sep">: </span><span className="t-bool">true</span><span className="t-comment"> // bug bounty, authorized only</span></span>
+            <span className="t-line"><span className="t-key">clients</span><span className="t-sep">:  </span><span className="t-num">4</span><span className="t-comment"> // active contracts, more delivered</span></span>
+          </motion.div>
+        )}
+
+        {step >= 5 && (
+          <motion.div
+            initial={{ opacity: 0, x: -15 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex flex-col gap-1 mt-2"
+          >
+            <span className="t-line t-comment"># i build websites and web apps — crypto exchanges, clinic systems, print shops.</span>
+            <span className="t-line t-comment"># fast load times, clean code, things that actually work.</span>
+            <span className="t-line t-comment"># always shipping, always learning something new.</span>
+          </motion.div>
+        )}
+
+        {step >= 6 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-3"
+          >
+            <span className="t-line">
+              <span className="t-prompt-user">mad</span>
+              <span className="t-sep">@</span>
+              <span className="t-prompt-host">portfolio</span>
+              <span className="t-sep">:</span>
+              <span className="t-prompt-path">~</span>
+              <span className="t-sep">$ </span>
+              <span className="hero-typed-caret" />
+            </span>
+          </motion.div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /*  PAGE                                                                */
 /* ------------------------------------------------------------------ */
@@ -583,58 +709,7 @@ export default function HomePage() {
           <div className="section-tab-rule" />
 
           {/* Terminal window */}
-          <div className="terminal-window">
-            <div className="terminal-titlebar">
-              <span className="filetab-dot filetab-dot-red" aria-hidden="true" />
-              <span className="filetab-dot filetab-dot-yellow" aria-hidden="true" />
-              <span className="filetab-dot filetab-dot-green" aria-hidden="true" />
-              <span className="terminal-title">mad@portfolio: ~</span>
-            </div>
-            <div className="terminal-body" aria-label="About Mad">
-              <span className="t-line">
-                <span className="t-prompt-user">mad</span>
-                <span className="t-sep">@</span>
-                <span className="t-prompt-host">portfolio</span>
-                <span className="t-sep">:</span>
-                <span className="t-prompt-path">~</span>
-                <span className="t-sep">$ </span>
-                <span className="t-prompt">whoami</span>
-              </span>
-              <span className="t-line-blank" />
-              <span className="t-line"><span className="t-key">name</span><span className="t-sep">:     </span><span className="t-str">"Mohammad Javad (Mad)"</span></span>
-              <span className="t-line"><span className="t-key">role</span><span className="t-sep">:     </span><span className="t-str">"Web Developer &amp; Vibe Coder"</span></span>
-              <span className="t-line"><span className="t-key">focus</span><span className="t-sep">:    </span><span className="t-str">"web development · full-stack apps · performance · security"</span></span>
-              <span className="t-line"><span className="t-key">stack</span><span className="t-sep">:    </span><span className="t-val">["Next.js", "React", "JavaScript", "TypeScript", "Node.js", "Python", "HTML/CSS/JS", "PostgreSQL"]</span></span>
-              <span className="t-line"><span className="t-key">security</span><span className="t-sep">: </span><span className="t-bool">true</span><span className="t-comment"> // bug bounty, authorized only</span></span>
-              <span className="t-line"><span className="t-key">clients</span><span className="t-sep">:  </span><span className="t-num">4</span><span className="t-comment"> // active contracts, more delivered</span></span>
-              <span className="t-line-blank" />
-              <span className="t-line t-comment">
-                # i build websites and web apps — crypto exchanges,
-              </span>
-              <span className="t-line t-comment">
-                # clinic booking systems, e-commerce, print shops.
-              </span>
-              <span className="t-line t-comment">
-                # fast load times, clean code, things that actually work.
-              </span>
-              <span className="t-line t-comment">
-                # also into ai agents, automation, and bug bounty.
-              </span>
-              <span className="t-line t-comment">
-                # always shipping, always learning something new.
-              </span>
-              <span className="t-line-blank" />
-              <span className="t-line">
-                <span className="t-prompt-user">mad</span>
-                <span className="t-sep">@</span>
-                <span className="t-prompt-host">portfolio</span>
-                <span className="t-sep">:</span>
-                <span className="t-prompt-path">~</span>
-                <span className="t-sep">$ </span>
-                <span style={{ color: "rgba(255,255,255,0.5)" }}>_</span>
-              </span>
-            </div>
-          </div>
+          <AboutTerminal />
         </div>
       </section>
 
