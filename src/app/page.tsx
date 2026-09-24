@@ -317,7 +317,10 @@ function useTypingLoop(words: string[], speed = 60, pause = 1800, deleteSpeed = 
 function AboutTerminal() {
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
+  const [inputVal, setInputVal] = useState("");
+  const [history, setHistory] = useState<Array<{ cmd: string; res: string }>>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -337,23 +340,58 @@ function AboutTerminal() {
   useEffect(() => {
     if (!started) return;
     const timers = [
-      setTimeout(() => setStep(1), 250),
-      setTimeout(() => setStep(2), 900),
-      setTimeout(() => setStep(3), 1400),
-      setTimeout(() => setStep(4), 1900),
-      setTimeout(() => setStep(5), 2400),
-      setTimeout(() => setStep(6), 3000),
+      setTimeout(() => setStep(1), 200),
+      setTimeout(() => setStep(2), 700),
+      setTimeout(() => setStep(3), 1100),
+      setTimeout(() => setStep(4), 1500),
+      setTimeout(() => setStep(5), 1900),
+      setTimeout(() => setStep(6), 2400),
     ];
     return () => timers.forEach(clearTimeout);
   }, [started]);
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const cmd = inputVal.trim().toLowerCase();
+      if (!cmd) return;
+
+      let res = "";
+      if (cmd === "help") {
+        res = "Available commands: stack, contact, clear, whoami, date, github";
+      } else if (cmd === "stack") {
+        res = "Next.js, React, TypeScript, Node.js, Python, PostgreSQL, GSAP, Framer Motion";
+      } else if (cmd === "contact") {
+        res = "Email: tornikato@gmail.com | Telegram: @mad_fekri | X: @0xkhala";
+      } else if (cmd === "whoami") {
+        res = "Mohammad Javad (Mad) — Web Developer & Bug Bounty Hunter";
+      } else if (cmd === "date") {
+        res = new Date().toUTCString();
+      } else if (cmd === "github") {
+        res = "https://github.com/shoghalblade/portfolio";
+      } else if (cmd === "clear") {
+        setHistory([]);
+        setInputVal("");
+        return;
+      } else {
+        res = `command not found: ${cmd}. Type 'help' for available commands.`;
+      }
+
+      setHistory((prev) => [...prev, { cmd: inputVal, res }]);
+      setInputVal("");
+    }
+  };
+
   return (
-    <div ref={containerRef} className="terminal-window">
+    <div 
+      ref={containerRef} 
+      className="terminal-window cursor-text"
+      onClick={() => inputRef.current?.focus()}
+    >
       <div className="terminal-titlebar">
         <span className="filetab-dot filetab-dot-red" aria-hidden="true" />
         <span className="filetab-dot filetab-dot-yellow" aria-hidden="true" />
         <span className="filetab-dot filetab-dot-green" aria-hidden="true" />
-        <span className="terminal-title">mad@portfolio: ~ (interactive stream)</span>
+        <span className="terminal-title">mad@portfolio: ~ (interactive shell)</span>
       </div>
       <div className="terminal-body" aria-label="About Mad">
         <span className="t-line">
@@ -370,60 +408,36 @@ function AboutTerminal() {
         </span>
 
         {step >= 2 && (
-          <motion.div
-            initial={{ opacity: 0, x: -15 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.25 }}
-            className="flex flex-col gap-1 mt-2"
-          >
+          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col gap-1 mt-2">
             <span className="t-line"><span className="t-key">name</span><span className="t-sep">:     </span><span className="t-str">"Mohammad Javad (Mad)"</span></span>
             <span className="t-line"><span className="t-key">role</span><span className="t-sep">:     </span><span className="t-str">"Web Developer &amp; Vibe Coder"</span></span>
           </motion.div>
         )}
 
         {step >= 3 && (
-          <motion.div
-            initial={{ opacity: 0, x: -15 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.25 }}
-            className="flex flex-col gap-1"
-          >
+          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col gap-1">
             <span className="t-line"><span className="t-key">focus</span><span className="t-sep">:    </span><span className="t-str">"web development · full-stack apps · performance · security"</span></span>
             <span className="t-line"><span className="t-key">stack</span><span className="t-sep">:    </span><span className="t-val">["Next.js", "React", "TypeScript", "Node.js", "Python", "PostgreSQL"]</span></span>
           </motion.div>
         )}
 
         {step >= 4 && (
-          <motion.div
-            initial={{ opacity: 0, x: -15 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.25 }}
-            className="flex flex-col gap-1"
-          >
+          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col gap-1">
             <span className="t-line"><span className="t-key">security</span><span className="t-sep">: </span><span className="t-bool">true</span><span className="t-comment"> // bug bounty, authorized only</span></span>
             <span className="t-line"><span className="t-key">clients</span><span className="t-sep">:  </span><span className="t-num">4</span><span className="t-comment"> // active contracts, more delivered</span></span>
           </motion.div>
         )}
 
         {step >= 5 && (
-          <motion.div
-            initial={{ opacity: 0, x: -15 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.25 }}
-            className="flex flex-col gap-1 mt-2"
-          >
+          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col gap-1 mt-2">
             <span className="t-line t-comment"># i build websites and web apps — crypto exchanges, clinic systems, print shops.</span>
             <span className="t-line t-comment"># fast load times, clean code, things that actually work.</span>
-            <span className="t-line t-comment"># always shipping, always learning something new.</span>
           </motion.div>
         )}
 
-        {step >= 6 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-3"
-          >
+        {/* Render Command History */}
+        {history.map((item, idx) => (
+          <div key={idx} className="mt-2 flex flex-col gap-1">
             <span className="t-line">
               <span className="t-prompt-user">mad</span>
               <span className="t-sep">@</span>
@@ -431,8 +445,35 @@ function AboutTerminal() {
               <span className="t-sep">:</span>
               <span className="t-prompt-path">~</span>
               <span className="t-sep">$ </span>
-              <span className="hero-typed-caret" />
+              <span style={{ color: "#fff" }}>{item.cmd}</span>
             </span>
+            <span className="t-line" style={{ color: "#10b981", paddingLeft: "12px" }}>
+              ➜ {item.res}
+            </span>
+          </div>
+        ))}
+
+        {step >= 6 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-3 flex items-center gap-2">
+            <span className="t-line shrink-0">
+              <span className="t-prompt-user">mad</span>
+              <span className="t-sep">@</span>
+              <span className="t-prompt-host">portfolio</span>
+              <span className="t-sep">:</span>
+              <span className="t-prompt-path">~</span>
+              <span className="t-sep">$ </span>
+            </span>
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputVal}
+              onChange={(e) => setInputVal(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="bg-transparent outline-none border-none text-white font-mono text-sm w-full caret-[#10b981]"
+              style={{ fontSize: "16px" }}
+              placeholder="type 'help'..."
+              autoFocus={false}
+            />
           </motion.div>
         )}
       </div>
