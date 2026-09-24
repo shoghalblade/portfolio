@@ -703,15 +703,15 @@ export default function HomePage() {
         {/* Headline */}
         <h1
           className="max-w-6xl w-full text-white font-bold tracking-tight leading-[1.05] text-[clamp(2.6rem,5vw,5rem)]"
-          aria-label="I Write Code. You Ship."
+          aria-label="You Dream It."
         >
-          <SplitChars text="I Write Code." />
+          <SplitChars text="You Dream It." />
         </h1>
         <h1
           className="max-w-6xl w-full font-bold tracking-tight leading-[1.05] text-[clamp(2.6rem,5vw,5rem)]"
-          aria-label="You Ship."
+          aria-label="I Code & Ship."
         >
-          <SplitChars text="You Ship." />
+          <SplitChars text="I Code & Ship." />
           &nbsp;
           <span
             className="gradient-pill align-middle mx-1"
