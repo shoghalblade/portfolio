@@ -700,17 +700,6 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Live Status Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.5 }}
-          className="mb-6 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#10b981]/30 bg-[#10b981]/10 font-mono text-xs text-[#10b981] shadow-lg shadow-[#10b981]/10 backdrop-blur-md"
-        >
-          <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse" />
-          <span>SYSTEM ONLINE · AI AGENTS &amp; FULL-STACK SHIPPED</span>
-        </motion.div>
-
         {/* Headline */}
         <h1
           className="max-w-6xl w-full text-white font-bold tracking-tight leading-[1.05] text-[clamp(2.6rem,5vw,5rem)]"
@@ -753,20 +742,6 @@ export default function HomePage() {
             get in touch
           </a>
         </div>
-
-        {/* Capability pills */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 3.1 }}
-          className="mt-6 flex gap-2 flex-wrap justify-center font-mono text-[11px]"
-        >
-          {["Next.js", "AI Agents", "Full-Stack", "Bug Bounty", "PostgreSQL", "GSAP"].map((tech) => (
-            <span key={tech} className="px-2.5 py-1 rounded-md border border-white/10 bg-white/[0.02] text-white/50 backdrop-blur-sm">
-              [{tech}]
-            </span>
-          ))}
-        </motion.div>
 
         {/* VS Code status bar at hero bottom */}
         <div className="vscode-statusbar">
