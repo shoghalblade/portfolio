@@ -791,14 +791,30 @@ export default function HomePage() {
           <div ref={timelineSection} className="relative pl-10 space-y-14">
             <div ref={timelineBorderRef} className="git-graph-line" />
             {experience.map((e, i) => (
-              <div key={e.hash} className="relative group">
+              <motion.div
+                key={e.hash}
+                className="relative group"
+                initial={{ opacity: 0, x: 45, filter: "blur(4px)" }}
+                whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{
+                  type: "spring",
+                  stiffness: 220,
+                  damping: 20,
+                  delay: i * 0.15,
+                }}
+              >
                 {/* Git node dot */}
-                <span
+                <motion.span
                   className="git-node"
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15, delay: i * 0.15 + 0.1 }}
                   style={{
                     top: "4px",
                     background: e.color,
-                    boxShadow: `0 0 8px ${e.color}66`,
+                    boxShadow: `0 0 12px ${e.color}88`,
                   }}
                 />
 
@@ -822,7 +838,7 @@ export default function HomePage() {
                 <p className="mt-2 text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.45)", fontFamily: "var(--font-mono)", maxWidth: "480px" }}>
                   // {e.detail}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
