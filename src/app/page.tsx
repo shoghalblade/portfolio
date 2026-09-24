@@ -496,23 +496,31 @@ export default function HomePage() {
 
   useEffect(() => {
     const sections = ["hero", "about", "skills", "projects", "experience", "contact"];
-    const handleScroll = () => {
-      const scrollPos = window.scrollY + 200;
-      for (const sId of sections) {
-        const el = document.getElementById(sId);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) {
-            setActiveSection(sId);
-            break;
-          }
-        }
-      }
-    };
+    const observers: IntersectionObserver[] = [];
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    sections.forEach((sId) => {
+      const el = document.getElementById(sId);
+      if (!el) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(sId);
+          }
+        },
+        {
+          root: null,
+          rootMargin: "-15% 0px -50% 0px",
+          threshold: 0,
+        }
+      );
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => {
+      observers.forEach((obs) => obs.disconnect());
+    };
   }, []);
 
   useEffect(() => {
