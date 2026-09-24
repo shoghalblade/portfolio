@@ -363,7 +363,7 @@ function AboutTerminal() {
       } else if (cmd === "contact") {
         res = "Email: tornikato@gmail.com | Telegram: @mad_fekri | X: @0xkhala";
       } else if (cmd === "whoami") {
-        res = "Mohammad Javad (Mad) — Web Developer & Bug Bounty Hunter";
+        res = "Mohammad Javad (Mad) — Web Developer & Vibe Coder";
       } else if (cmd === "date") {
         res = new Date().toUTCString();
       } else if (cmd === "github") {
