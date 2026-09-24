@@ -490,7 +490,41 @@ export default function HomePage() {
   const aboutGhost = useRef<HTMLSpanElement>(null);
   const timelineSection = useRef<HTMLDivElement>(null);
   const timelineBorderRef = useRef<HTMLDivElement>(null);
+  const navBarRef = useRef<HTMLElement>(null);
   const [loaded, setLoaded] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
+
+  useEffect(() => {
+    const sections = ["hero", "about", "skills", "projects", "experience", "contact"];
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + 200;
+      for (const sId of sections) {
+        const el = document.getElementById(sId);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPos >= top && scrollPos < top + height) {
+            setActiveSection(sId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!navBarRef.current) return;
+    const activeEl = navBarRef.current.querySelector<HTMLElement>(".nav-tab.active");
+    if (activeEl) {
+      navBarRef.current.scrollTo({
+        left: activeEl.offsetLeft - navBarRef.current.offsetWidth / 2 + activeEl.offsetWidth / 2,
+        behavior: "smooth",
+      });
+    }
+  }, [activeSection]);
 
   const typedText = useTypingLoop(
     ["Vibe Coder", "Web Developer", "Bug Bounty Hunter"],
@@ -607,16 +641,20 @@ export default function HomePage() {
       <div className="grain" aria-hidden />
 
       {/* ============ NAV — editor tab bar ============ */}
-      <nav className="nav-bar" aria-label="Site navigation">
+      <nav ref={navBarRef} className="nav-bar" aria-label="Site navigation">
         <div className="nav-tabs">
           {[
-            { label: "about.tsx", href: "#about" },
-            { label: "skills.json", href: "#skills" },
-            { label: "projects.tsx", href: "#projects" },
-            { label: "experience.log", href: "#experience" },
-            { label: "contact.sh", href: "#contact" },
+            { label: "about.tsx", href: "#about", id: "about" },
+            { label: "skills.json", href: "#skills", id: "skills" },
+            { label: "projects.tsx", href: "#projects", id: "projects" },
+            { label: "experience.log", href: "#experience", id: "experience" },
+            { label: "contact.sh", href: "#contact", id: "contact" },
           ].map((tab) => (
-            <a key={tab.label} href={tab.href} className="nav-tab">
+            <a
+              key={tab.label}
+              href={tab.href}
+              className={`nav-tab ${activeSection === tab.id ? "active" : ""}`}
+            >
               {tab.label}
             </a>
           ))}
