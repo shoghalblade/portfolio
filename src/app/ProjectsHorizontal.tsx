@@ -267,7 +267,7 @@ export default function ProjectsHorizontal() {
             {/* Diagonal clipped screenshot window */}
             <div className="proj-clip-window">
               <img
-                src={p.img}
+                src={`${process.env.NODE_ENV === "production" ? "/portfolio" : ""}${p.img}`}
                 alt={p.name}
                 loading="lazy"
                 decoding="async"
