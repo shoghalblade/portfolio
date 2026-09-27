@@ -140,6 +140,11 @@ export default function ProjectsHorizontal() {
     const t2 = setTimeout(() => ScrollTrigger.refresh(), 600);
     const t3 = setTimeout(() => ScrollTrigger.refresh(), 1200);
 
+    const resizeObserver = new ResizeObserver(() => {
+      ScrollTrigger.refresh();
+    });
+    resizeObserver.observe(document.body);
+
     const imgTweens = gsap.utils.toArray<HTMLElement>(".proj-img").map((img) =>
       gsap.fromTo(
         img,
@@ -162,6 +167,7 @@ export default function ProjectsHorizontal() {
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
+      resizeObserver.disconnect();
       tween.scrollTrigger?.kill();
       tween.kill();
       imgTweens.forEach((tw) => {
