@@ -6,6 +6,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
+// mobile URL-bar show/hide fires resize while scrolling -> ScrollTrigger.refresh()
+// re-runs its internal scrollTo, and with `scroll-behavior: smooth` on <html>
+// that scrollTo ANIMATES -> visible "content jumps up" mid-scroll.
+// ignoreMobileResize drops only those height-only mobile resizes (width changes
+// and orientation still refresh normally).
+if (typeof window !== "undefined")
+  ScrollTrigger.config({ ignoreMobileResize: true });
 
 const projects = [
   {
@@ -123,6 +130,16 @@ export default function ProjectsHorizontal() {
       },
     });
 
+    // fonts swap AFTER ScrollTrigger's first measure -> layout above #projects
+    // grows (measured 78px on a 393px viewport) while `start` stays stale, so the
+    // pin fires early and the section snaps up. Re-measure once fonts are in,
+    // window loads, and layout stabilizes.
+    if (document.fonts) document.fonts.ready.then(() => ScrollTrigger.refresh());
+    window.addEventListener("load", () => ScrollTrigger.refresh());
+    const t1 = setTimeout(() => ScrollTrigger.refresh(), 150);
+    const t2 = setTimeout(() => ScrollTrigger.refresh(), 600);
+    const t3 = setTimeout(() => ScrollTrigger.refresh(), 1200);
+
     const imgTweens = gsap.utils.toArray<HTMLElement>(".proj-img").map((img) =>
       gsap.fromTo(
         img,
@@ -142,6 +159,9 @@ export default function ProjectsHorizontal() {
     );
 
     return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
       tween.scrollTrigger?.kill();
       tween.kill();
       imgTweens.forEach((tw) => {
