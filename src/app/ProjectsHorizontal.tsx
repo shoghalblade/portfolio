@@ -112,7 +112,13 @@ export default function ProjectsHorizontal() {
         end: () => `+=${getTotal()}`,
         pin: true,
         scrub: 0.1,
-        anticipatePin: 1,
+        // ponytail: anticipatePin (velocity * 45px) pins the section up to
+        // hundreds of px BEFORE its real start on a fast flick, so the skills
+        // tail stays visible behind this (transparent) section — "last projects"
+        // lands on a skill card. Pin start here equals the element's natural
+        // position, so anticipation buys nothing. Upgrade path: only reintroduce
+        // with an opaque section background.
+        anticipatePin: 0,
         invalidateOnRefresh: true,
       },
     });
