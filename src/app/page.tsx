@@ -359,7 +359,7 @@ function AboutTerminal() {
       if (cmd === "help") {
         res = "Available commands: stack, contact, clear, whoami, date, github";
       } else if (cmd === "stack") {
-        res = "Python, Next.js, React, TypeScript, HTML/CSS, Node.js, PostgreSQL, GSAP, Framer Motion";
+        res = "Python, Next.js, React, JavaScript, TypeScript, Node.js, HTML/CSS, PostgreSQL, GSAP, Framer Motion";
       } else if (cmd === "contact") {
         res = "Email: tornikato@gmail.com | Telegram: @mad_fekri | X: @0xkhala";
       } else if (cmd === "whoami") {
@@ -417,7 +417,7 @@ function AboutTerminal() {
         {step >= 3 && (
           <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col gap-1">
             <span className="t-line"><span className="t-key">focus</span><span className="t-sep">:    </span><span className="t-str">"web development · full-stack apps · performance · security"</span></span>
-            <span className="t-line"><span className="t-key">stack</span><span className="t-sep">:    </span><span className="t-val">["Python", "Next.js", "React", "TypeScript", "HTML/CSS", "Node.js", "PostgreSQL"]</span></span>
+            <span className="t-line"><span className="t-key">stack</span><span className="t-sep">:    </span><span className="t-val">["Python", "Next.js", "React", "JavaScript", "TypeScript", "Node.js", "HTML/CSS", "PostgreSQL"]</span></span>
           </motion.div>
         )}
 
